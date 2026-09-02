@@ -343,7 +343,7 @@ This project is created for educational and analytical purposes.
 
 ## 👤 Author
 
-Restaurant Analytics Team
+**Sakshi Thorat**
 
 ---
 

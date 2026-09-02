@@ -3,7 +3,7 @@
  RESTAURANT RATING PREDICTION AND CUSTOMER PREFERENCE ANALYSIS
 ============================================================================
  Project  : Restaurant Analytics & Machine Learning Rating Predictor
- Author   : Restaurant Analytics Team
+ Author   : Sakshi Thorat
  Dataset  : Zomato Restaurant Dataset (~9,551 records)
  Target   : Aggregate rating
  Models   : Linear Regression, Decision Tree, Random Forest, Neural Network
