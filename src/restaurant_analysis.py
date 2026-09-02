@@ -2,7 +2,7 @@
 ============================================================================
  RESTAURANT RATING PREDICTION AND CUSTOMER PREFERENCE ANALYSIS
 ============================================================================
- Project  : Cognifyz Level 3 - Restaurant Analytics & ML
+ Project  : Restaurant Analytics & Machine Learning Rating Predictor
  Author   : Restaurant Analytics Team
  Dataset  : Zomato Restaurant Dataset (~9,551 records)
  Target   : Aggregate rating

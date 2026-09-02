@@ -4,7 +4,7 @@
 
 A comprehensive machine learning project that predicts restaurant aggregate ratings and analyzes customer cuisine preferences using a real-world restaurant dataset containing ~9,551 records across multiple countries.
 
-**Built for**: Cognifyz Level 3 Submission | College Project | GitHub Portfolio | Resume Project
+**Built for**: College Project | GitHub Portfolio | Resume Project | Machine Learning Showcase
 
 ---
 
@@ -337,13 +337,13 @@ restaurant-rating-analysis/
 
 ## 📜 License
 
-This project is created for educational purposes as part of the Cognifyz internship program.
+This project is created for educational and analytical purposes.
 
 ---
 
 ## 👤 Author
 
-Restaurant Analytics Team — Cognifyz Level 3 Project
+Restaurant Analytics Team
 
 ---
 
