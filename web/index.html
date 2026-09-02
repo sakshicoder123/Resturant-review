@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zomato Restaurant Rating Analytics & ML Predictor</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Navigation Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">🍽️</div>
+        <div>
+          <div class="brand-title">Restaurant Analytics & ML</div>
+          <div class="brand-subtitle">Rating Prediction & Customer Preference Engine</div>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" role="tablist">
+        <button class="nav-tab active" data-tab="tab-predictor">
+          <span>🎯</span> Rating Predictor
+        </button>
+        <button class="nav-tab" data-tab="tab-analytics">
+          <span>📊</span> EDA & Insights
+        </button>
+        <button class="nav-tab" data-tab="tab-cuisines">
+          <span>🍕</span> Cuisine Preferences
+        </button>
+        <button class="nav-tab" data-tab="tab-models">
+          <span>🤖</span> Model Hub
+        </button>
+        <button class="nav-tab" data-tab="tab-dataset">
+          <span>🔍</span> Dataset Explorer
+        </button>
+      </nav>
+    </header>
+
+    <!-- Stat Pills Banner -->
+    <div class="stats-banner">
+      <div class="stat-pill">
+        <div class="stat-pill-icon icon-red">🏢</div>
+        <div>
+          <div class="stat-pill-val">9,551</div>
+          <div class="stat-pill-label">Total Restaurants</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-icon icon-green">🏆</div>
+        <div>
+          <div class="stat-pill-val">0.9619</div>
+          <div class="stat-pill-label">Best Model R² Score</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-icon icon-purple">🍕</div>
+        <div>
+          <div class="stat-pill-val">146</div>
+          <div class="stat-pill-label">Unique Cuisines</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-icon icon-amber">🎯</div>
+        <div>
+          <div class="stat-pill-val">±0.19</div>
+          <div class="stat-pill-label">Mean Absolute Error</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         TAB 1: INTERACTIVE RATING PREDICTOR
+         ========================================================================= -->
+    <main id="tab-predictor" class="tab-content active">
+      <div class="grid-2col">
+        
+        <!-- Input Form Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-title-icon">⚙️</span>
+              Restaurant Features Simulator
+            </h2>
+            <span class="card-badge">Trained Random Forest</span>
+          </div>
+
+          <form id="predictionForm" onsubmit="event.preventDefault();">
+            <div class="form-grid">
+              
+              <!-- City -->
+              <div>
+                <label class="form-label" for="inputCity">City</label>
+                <select id="inputCity" class="form-select">
+                  <option value="New Delhi" selected>New Delhi</option>
+                  <option value="Gurgaon">Gurgaon</option>
+                  <option value="Noida">Noida</option>
+                  <option value="Faridabad">Faridabad</option>
+                  <option value="Bhubaneshwar">Bhubaneshwar</option>
+                  <option value="Lucknow">Lucknow</option>
+                  <option value="Ahmedabad">Ahmedabad</option>
+                  <option value="Guwahati">Guwahati</option>
+                  <option value="Abu Dhabi">Abu Dhabi</option>
+                  <option value="Other">Other Cities</option>
+                </select>
+              </div>
+
+              <!-- Primary Cuisine -->
+              <div>
+                <label class="form-label" for="inputCuisine">Primary Cuisine</label>
+                <select id="inputCuisine" class="form-select">
+                  <option value="North Indian" selected>North Indian</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="Fast Food">Fast Food</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Continental">Continental</option>
+                  <option value="Cafe">Cafe</option>
+                  <option value="American">American</option>
+                  <option value="South Indian">South Indian</option>
+                  <option value="Mughlai">Mughlai</option>
+                  <option value="Desserts">Desserts</option>
+                  <option value="Asian">Asian</option>
+                  <option value="Sushi">Sushi</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <!-- Average Cost for Two Slider -->
+              <div class="form-group-full">
+                <div class="form-label">
+                  <span>Average Cost for Two</span>
+                  <span id="costVal" class="form-val-display">₹800</span>
+                </div>
+                <input type="range" id="inputCost" class="form-slider" min="100" max="6000" step="50" value="800">
+              </div>
+
+              <!-- Votes Engagement Slider -->
+              <div class="form-group-full">
+                <div class="form-label">
+                  <span>Customer Votes Engagement</span>
+                  <span id="votesVal" class="form-val-display">250</span>
+                </div>
+                <input type="range" id="inputVotes" class="form-slider" min="0" max="4000" step="10" value="250">
+              </div>
+
+              <!-- Price Range Tier Selection -->
+              <div class="form-group-full">
+                <label class="form-label">Price Range Tier</label>
+                <input type="hidden" id="inputPriceRange" value="2">
+                <div class="price-tiers">
+                  <button type="button" class="price-tier-btn" data-tier="1">₹ Budget (1)</button>
+                  <button type="button" class="price-tier-btn active" data-tier="2">₹₹ Mid (2)</button>
+                  <button type="button" class="price-tier-btn" data-tier="3">₹₹₹ Fine (3)</button>
+                  <button type="button" class="price-tier-btn" data-tier="4">₹₹₹₹ Luxury (4)</button>
+                </div>
+              </div>
+
+              <!-- Number of Cuisines -->
+              <div class="form-group-full">
+                <div class="form-label">
+                  <span>Number of Cuisines Offered</span>
+                  <span id="numCuisinesVal" class="form-val-display">2</span>
+                </div>
+                <input type="range" id="inputNumCuisines" class="form-slider" min="1" max="8" step="1" value="2">
+              </div>
+
+              <!-- Toggle Switches -->
+              <div class="form-group-full">
+                <div class="switch-row">
+                  <span class="switch-label">📅 Table Booking Available</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="inputBooking">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="switch-row">
+                  <span class="switch-label">🛵 Online Delivery Available</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="inputDelivery" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="switch-row">
+                  <span class="switch-label">⚡ Delivering Right Now</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="inputDeliveringNow">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </form>
+
+          <!-- Fast Preset Scenarios -->
+          <div style="margin-top: 18px;">
+            <div class="form-label">Quick Test Scenarios</div>
+            <div class="presets-grid">
+              <button class="preset-btn" data-preset="upscale">
+                <div class="preset-btn-name">👑 Luxury Dining</div>
+                <div class="preset-btn-desc">₹2500, 850 votes, Booking: Yes</div>
+              </button>
+              <button class="preset-btn" data-preset="budget">
+                <div class="preset-btn-name">🍔 Budget QSR</div>
+                <div class="preset-btn-desc">₹350, 60 votes, Delivery: Yes</div>
+              </button>
+              <button class="preset-btn" data-preset="midrange">
+                <div class="preset-btn-name">🍝 Popular Bistro</div>
+                <div class="preset-btn-desc">₹1200, 420 votes, Booking: Yes</div>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Output Prediction Gauge Card -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-title-icon">🎯</span>
+              Predicted Rating
+            </h2>
+            <span class="card-badge" style="background: rgba(46, 213, 115, 0.15); color: #2ed573;">Live Scored</span>
+          </div>
+
+          <div class="predict-meter-container">
+            
+            <!-- SVG Circular Dial -->
+            <div class="rating-gauge">
+              <svg width="190" height="190" viewBox="0 0 190 190">
+                <defs>
+                  <linearGradient id="ratingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ff5252" />
+                    <stop offset="50%" stop-color="#ffa502" />
+                    <stop offset="100%" stop-color="#2ed573" />
+                  </linearGradient>
+                </defs>
+                <circle class="gauge-circle-bg" cx="95" cy="95" r="70" />
+                <circle id="gaugeCircleProgress" class="gauge-circle-progress" cx="95" cy="95" r="70" />
+              </svg>
+              <div class="gauge-inner-content">
+                <div id="predictedRatingVal" class="gauge-rating-value">3.8</div>
+                <div class="gauge-rating-scale">OUT OF 5.0</div>
+              </div>
+            </div>
+
+            <!-- Quality Tier Badge -->
+            <div id="ratingCategoryBadge" class="rating-category-pill cat-good">
+              ★ Good (3.5 – 3.9)
+            </div>
+
+            <!-- Breakdown of Major Impact Factors -->
+            <div class="impact-factors">
+              <div class="impact-row">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Votes Engagement Impact (94.8% weight)</span>
+                <div class="impact-bar-bg">
+                  <div id="barVoteImpact" class="impact-bar-fill" style="width: 65%;"></div>
+                </div>
+              </div>
+              <div class="impact-row">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Price Tier Contribution</span>
+                <div class="impact-bar-bg">
+                  <div id="barPriceImpact" class="impact-bar-fill" style="width: 50%;"></div>
+                </div>
+              </div>
+              <div class="impact-row">
+                <span style="color: var(--text-muted); font-size: 0.78rem;">Cost & Experience Factor</span>
+                <div class="impact-bar-bg">
+                  <div id="barCostImpact" class="impact-bar-fill" style="width: 35%;"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); padding: 12px; font-size: 0.8rem; color: var(--text-secondary); border: 1px solid var(--border-glass);">
+            💡 <strong>Model Note:</strong> Predictions reflect the 5-fold cross-validated <strong>Optimized Random Forest Regressor</strong> ($R^2 = 0.9619$).
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- =========================================================================
+         TAB 2: EXPLORATORY DATA ANALYSIS (EDA)
+         ========================================================================= -->
+    <section id="tab-analytics" class="tab-content">
+      <div class="grid-cards">
+        
+        <!-- Votes vs Rating Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🗳️ Customer Votes vs Rating</h3>
+            <span class="card-badge">Positive Correlation (+0.31)</span>
+          </div>
+          <div class="styled-table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Vote Tier</th>
+                  <th>Count</th>
+                  <th>Avg Rating</th>
+                  <th>Avg Votes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>0 – 10 (Low/New)</td><td>3,088</td><td><span class="rating-chip" style="background: rgba(255,71,87,0.15); color: #ff4757;">0.90 ★</span></td><td>2.5</td></tr>
+                <tr><td>11 – 50</td><td>2,458</td><td><span class="rating-chip" style="background: rgba(255,121,63,0.15); color: #ff793f;">3.18 ★</span></td><td>25.0</td></tr>
+                <tr><td>51 – 100</td><td>1,179</td><td><span class="rating-chip" style="background: rgba(255,177,66,0.15); color: #ffb142;">3.41 ★</span></td><td>72.3</td></tr>
+                <tr><td>101 – 500</td><td>2,120</td><td><span class="rating-chip" style="background: rgba(30,144,255,0.15); color: #1e90ff;">3.74 ★</span></td><td>223.9</td></tr>
+                <tr><td>501 – 1000</td><td>410</td><td><span class="rating-chip" style="background: rgba(46,213,115,0.15); color: #2ed573;">4.08 ★</span></td><td>690.4</td></tr>
+                <tr><td>1001 – 5000</td><td>284</td><td><span class="rating-chip" style="background: rgba(46,213,115,0.15); color: #2ed573;">4.18 ★</span></td><td>1,779.9</td></tr>
+                <tr><td>5000+ (High Buzz)</td><td>12</td><td><span class="rating-chip" style="background: rgba(46,213,115,0.15); color: #2ed573;">4.47 ★</span></td><td>6,759.0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Price Range vs Rating -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">💰 Price Range vs Rating</h3>
+            <span class="card-badge">Strongest Predictor (+0.44)</span>
+          </div>
+          <div class="styled-table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Price Tier</th>
+                  <th>Restaurants</th>
+                  <th>Avg Rating</th>
+                  <th>Avg Cost for Two</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Tier 1 (Budget)</td><td>4,444</td><td><span class="rating-chip" style="background: rgba(255,71,87,0.15); color: #ff4757;">2.00 ★</span></td><td>₹275</td></tr>
+                <tr><td>Tier 2 (Mid-Range)</td><td>3,113</td><td><span class="rating-chip" style="background: rgba(255,121,63,0.15); color: #ff793f;">2.94 ★</span></td><td>₹597</td></tr>
+                <tr><td>Tier 3 (Fine Dining)</td><td>1,408</td><td><span class="rating-chip" style="background: rgba(30,144,255,0.15); color: #1e90ff;">3.68 ★</span></td><td>₹5,177</td></tr>
+                <tr><td>Tier 4 (Luxury)</td><td>586</td><td><span class="rating-chip" style="background: rgba(46,213,115,0.15); color: #2ed573;">3.82 ★</span></td><td>₹1,849</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Services Impact -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🛎️ Services & Booking Impact</h3>
+            <span class="card-badge">Value-Add Amenities</span>
+          </div>
+          <div class="styled-table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Service Type</th>
+                  <th>Available</th>
+                  <th>Count</th>
+                  <th>Avg Rating</th>
+                  <th>Avg Votes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Table Booking</td><td><span style="color: #2ed573;">✓ Yes</span></td><td>1,158</td><td><strong>3.44 ★</strong></td><td>353.1</td></tr>
+                <tr><td>Table Booking</td><td><span style="color: #ff4757;">✗ No</span></td><td>8,393</td><td>2.56 ★</td><td>129.8</td></tr>
+                <tr><td>Online Delivery</td><td><span style="color: #2ed573;">✓ Yes</span></td><td>2,451</td><td><strong>3.25 ★</strong></td><td>211.3</td></tr>
+                <tr><td>Online Delivery</td><td><span style="color: #ff4757;">✗ No</span></td><td>7,100</td><td>2.47 ★</td><td>138.1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 3: CUISINE & CUSTOMER PREFERENCE ANALYSIS
+         ========================================================================= -->
+    <section id="tab-cuisines" class="tab-content">
+      
+      <!-- Key Insight Box -->
+      <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-primary);">
+        <h3 style="font-family: var(--font-display); margin-bottom: 8px; font-size: 1.15rem;">
+          💡 Key Finding: Popularity (Votes) ≠ Highest Rating
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+          Our multi-cuisine analysis revealed a <strong>0% overlap</strong> between the 10 most popular cuisines (by total votes) and the top 10 highest-rated cuisines (with statistical threshold $N \ge 20$). Popular cuisines (North Indian, Chinese, Fast Food) serve broad mass appeal with high rating dispersion, while specialized niche cuisines (International, Southern, Mediterranean, Sushi) sustain significantly higher customer satisfaction.
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        
+        <!-- Top 10 Most Popular Cuisines -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🔥 Top 10 Most Popular (by Votes)</h3>
+            <span class="card-badge">Volume Driven</span>
+          </div>
+          <div class="styled-table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Cuisine</th>
+                  <th>Restaurants</th>
+                  <th>Total Votes</th>
+                  <th>Avg Rating</th>
+                </tr>
+              </thead>
+              <tbody id="popularCuisinesTable">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Top Highest Rated Cuisines -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">⭐ Highest-Rated Cuisines</h3>
+            <span class="card-badge" style="background: rgba(46, 213, 115, 0.15); color: #2ed573;">Min 20 Restaurants</span>
+          </div>
+          <div class="styled-table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Cuisine</th>
+                  <th>Restaurants</th>
+                  <th>Avg Rating</th>
+                  <th>Total Votes</th>
+                </tr>
+              </thead>
+              <tbody id="highestRatedCuisinesTable">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 4: MODEL HUB & BENCHMARKING
+         ========================================================================= -->
+    <section id="tab-models" class="tab-content">
+      
+      <!-- Model Evaluation Matrix Cards -->
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 14px;">
+          🤖 Machine Learning Algorithm Comparison
+        </h3>
+        <div id="modelsBenchmarkGrid" class="models-grid">
+          <!-- Injected via app.js -->
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        
+        <!-- Feature Importance Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">📊 Feature Importance Ranking</h3>
+            <span class="card-badge">Random Forest Importances</span>
+          </div>
+          <div id="featureImportanceList" class="feature-rank-list">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+        <!-- Optimization Details Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">⚙️ Hyperparameter Optimization</h3>
+            <span class="card-badge">RandomizedSearchCV (5-Fold)</span>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.88rem;">
+            <div style="background: rgba(0,0,0,0.25); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+              <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 6px;">Optimal Parameters Discovered:</div>
+              <ul style="padding-left: 18px; color: var(--text-secondary); line-height: 1.8;">
+                <li><code>n_estimators</code>: 300 decision trees</li>
+                <li><code>min_samples_split</code>: 2</li>
+                <li><code>min_samples_leaf</code>: 1</li>
+                <li><code>max_features</code>: None (all features evaluated)</li>
+                <li><code>max_depth</code>: None (unconstrained tree growth)</li>
+              </ul>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.25); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+              <div style="font-weight: 700; color: #2ed573; margin-bottom: 6px;">Cross-Validation Performance:</div>
+              <p style="color: var(--text-secondary);">
+                Achieved a 5-Fold Cross-Validation $R^2$ of <strong>0.9591</strong> and a final Test $R^2$ of <strong>0.9619</strong>, cutting mean absolute error down to <strong>0.1928 rating points</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         TAB 5: DATASET EXPLORER
+         ========================================================================= -->
+    <section id="tab-dataset" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🔍 Zomato Restaurant Database Browser</h3>
+          <span class="card-badge">9,551 Records</span>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="filter-bar">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔎</span>
+            <input type="text" id="datasetSearch" class="search-input" placeholder="Search by restaurant name, city, or cuisine...">
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="styled-table-wrapper">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Restaurant Name</th>
+                <th>City</th>
+                <th>Cuisines</th>
+                <th>Cost for 2</th>
+                <th>Votes</th>
+                <th>Table Booking</th>
+                <th>Actual Rating</th>
+              </tr>
+            </thead>
+            <tbody id="datasetTableBody">
+              <!-- Injected via app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="pagination">
+          <span id="datasetPageInfo">Page 1 of 3</span>
+          <div style="display: flex; gap: 8px;">
+            <button id="datasetPrev" class="page-btn">← Previous</button>
+            <button id="datasetNext" class="page-btn">Next →</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>🍽️ <strong>Zomato Restaurant Rating Analytics & ML Project</strong> • Cognifyz Level 3 Submission</p>
+      <p style="margin-top: 4px; font-size: 0.78rem;">Built with Pure HTML, CSS, JavaScript & Python Scikit-Learn Pipeline</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

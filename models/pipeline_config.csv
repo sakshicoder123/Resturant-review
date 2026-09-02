@@ -1,0 +1,6 @@
+Parameter,Value
+best_model,Random Forest (Optimized)
+features_numeric,"['Average Cost for two', 'Longitude', 'Latitude', 'Votes', 'Price range', 'Num_Cuisines', 'Has Table booking_enc', 'Has Online delivery_enc', 'Is delivering now_enc']"
+features_categorical,"['City', 'Primary_Cuisine']"
+test_size,0.2
+random_state,42
